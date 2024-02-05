@@ -1,10 +1,11 @@
 package com.app.studentlaptop.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.app.studentlaptop.configClass.ResponseStructure;
 import com.app.studentlaptop.dao.LaptopDao;
 import com.app.studentlaptop.dto.Laptop;
 
@@ -14,29 +15,47 @@ public class LaptopService  {
 	@Autowired
 	private LaptopDao laptopDao;
 
-	public Laptop getLaptop(Long id) {
+	public ResponseEntity<ResponseStructure<Laptop>>  getLaptop(Long id) {
+		ResponseStructure<Laptop> structure = new ResponseStructure<Laptop>();
+		structure.setMessage("Found Laptop");
+		structure.setStatusCode(HttpStatus.FOUND.value());
+		structure.setData(laptopDao.getLaptop(id));
 		
-		return laptopDao.getLaptop(id);
+		return new ResponseEntity<ResponseStructure<Laptop>>(structure,HttpStatus.FOUND);
 	}
 
-	public List<Laptop> getAllLaptops() {
-	
-		return laptopDao.getLaptops();
-	}
-
-	public Laptop saveLaptop(Laptop laptop) {
+	public ResponseEntity<ResponseStructure<Laptop>> saveLaptop(Laptop laptop) {
+		ResponseStructure<Laptop> structure = new ResponseStructure<Laptop>();
+		structure.setMessage("Laptop saved");
+		structure.setStatusCode(HttpStatus.CREATED.value());
+		structure.setData(laptopDao.saveLaptop(laptop));
 		
-		return laptopDao.saveLaptop(laptop);
+		return new ResponseEntity<ResponseStructure<Laptop>>(structure, HttpStatus.CREATED);
 	}
 
-	public Laptop updateLaptop(Long id, Laptop laptop) {
+	public ResponseEntity<ResponseStructure<Laptop>> updateLaptop(Long id, Laptop laptop) {
+		ResponseStructure<Laptop> structure = new ResponseStructure<Laptop>();
+		structure.setMessage("laptop updated");
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setData(laptopDao.updateLaptop(id, laptop));
 		
-		return laptopDao.updateLaptop(id,laptop);
+		return new ResponseEntity<ResponseStructure<Laptop>>(structure, HttpStatus.OK);
 	}
-
-	public String deleteLaptop(Long id) {
-	
-		return laptopDao.deleteLaptop(id);
+	public ResponseEntity<ResponseStructure<Laptop>>  deleteLaptop(Long id) {
+		ResponseStructure<Laptop> structure = new ResponseStructure<Laptop>();
+		structure.setMessage("Laptop deleted");
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setData(laptopDao.deleteLaptop(id));
+		
+		return new ResponseEntity<ResponseStructure<Laptop>>(structure,HttpStatus.OK);
 	}
+//	public ResponseStructure<Laptop> getAllLaptops() {
+//		ResponseStructure<Laptop> structure = new ResponseStructure<Laptop>();
+//		structure.setMessage("Found Laptop");
+//		structure.setStatusCode(HttpStatus.FOUND.value());
+//		structure.setDataList(laptopDao.getLaptops());
+//		
+//		return structure;
+//	}
 
 }
